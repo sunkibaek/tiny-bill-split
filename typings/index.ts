@@ -1,0 +1,1 @@
+type NumType = number | "." | "DEL";
