@@ -11,6 +11,8 @@ const Home = () => {
   const [dollars, setDollars] = useState(0);
   const [cents, setCents] = useState(0);
   const [mode, setMode] = useState<Mode>("NORMAL");
+  const tip = 10;
+  const split = 2;
 
   const handleNumPress = (num: NumType) => {
     if (num === ".") {
@@ -68,9 +70,26 @@ const Home = () => {
     return result;
   };
 
+  const total = Number(`${dollars}.${cents}`);
+  const billTotalNumber = Math.ceil((total + total * (tip / 100)) * 100) / 100;
+  const billTotal = String(
+    Math.ceil((total + total * (tip / 100)) * 100) / 100
+  );
+  const splitTotal = String(Math.ceil((billTotalNumber / split) * 100) / 100);
+
+  const totals = {
+    total: formattedTotal(),
+    billTotal,
+    splitTotal,
+  };
+
   return (
     <View>
-      <ResultSection total={formattedTotal()} />
+      <ResultSection
+        total={totals.total}
+        billTotal={totals.billTotal}
+        splitTotal={totals.splitTotal}
+      />
 
       <InputSection />
 
