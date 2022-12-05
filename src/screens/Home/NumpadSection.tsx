@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import Numpad from "../../components/Numpad";
 
 interface IProps {
   onNumPress: (num: NumType) => void;
@@ -28,23 +29,13 @@ const NUMS: NumType[][] = [
   [".", 0, "DEL"],
 ];
 
-const NumberPadSection = ({ onNumPress }: IProps) => {
-  const handleNumPress = (num: NumType) => () => {
-    onNumPress(num);
-  };
-
+const NumpadSection = ({ onNumPress }: IProps) => {
   return (
     <View>
       {NUMS.map((row, index) => (
         <View key={index} style={styles.row}>
           {row.map((num) => (
-            <Pressable
-              key={num}
-              style={styles.numContainer}
-              onPress={handleNumPress(num)}
-            >
-              <Text style={styles.numText}>{num}</Text>
-            </Pressable>
+            <Numpad key={num} title={num} onPress={onNumPress} />
           ))}
         </View>
       ))}
@@ -52,4 +43,4 @@ const NumberPadSection = ({ onNumPress }: IProps) => {
   );
 };
 
-export default NumberPadSection;
+export default NumpadSection;

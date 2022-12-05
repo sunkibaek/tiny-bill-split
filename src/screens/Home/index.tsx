@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import InputSection from "./InputSection";
-import NumberPadSection from "./NumberPadSection";
+import NumpadSection from "./NumpadSection";
 import ResultSection from "./ResultSection";
 
 type Mode = "NORMAL" | "DECIMAL";
@@ -106,7 +106,7 @@ const Home = () => {
         onSplitChange={handleSplitChange}
       />
 
-      <NumberPadSection onNumPress={handleNumPress} />
+      <NumpadSection onNumPress={handleNumPress} />
     </View>
   );
 };
