@@ -3,6 +3,8 @@ import { StyleSheet, View } from "react-native";
 
 import Home from "./src/screens/Home";
 
+// export { default } from "./storybook";
+
 export default function App() {
   return (
     <View style={styles.container}>
