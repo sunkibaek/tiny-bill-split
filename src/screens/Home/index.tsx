@@ -11,8 +11,8 @@ const Home = () => {
   const [dollars, setDollars] = useState(0);
   const [cents, setCents] = useState(0);
   const [mode, setMode] = useState<Mode>("NORMAL");
-  const tip = 10;
-  const split = 2;
+  const [tip, setTip] = useState(15);
+  const [split, setSplit] = useState(2);
 
   const handleNumPress = (num: NumType) => {
     if (num === ".") {
@@ -58,6 +58,14 @@ const Home = () => {
     }
   };
 
+  const handleTipChange = (newTip: number) => {
+    setTip(newTip);
+  };
+
+  const handleSplitChange = (newSplit: number) => {
+    setSplit(newSplit);
+  };
+
   const formattedTotal = () => {
     let result = String(dollars);
 
@@ -91,7 +99,12 @@ const Home = () => {
         splitTotal={totals.splitTotal}
       />
 
-      <InputSection />
+      <InputSection
+        tip={tip}
+        split={split}
+        onTipChange={handleTipChange}
+        onSplitChange={handleSplitChange}
+      />
 
       <NumberPadSection onNumPress={handleNumPress} />
     </View>

@@ -1,6 +1,17 @@
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { Modal, Text, View } from "react-native";
+import Slider from "@react-native-community/slider";
 
-const InputSection = () => {
+interface IProps {
+  tip: number;
+  split: number;
+  onTipChange: (tip: number) => void;
+  onSplitChange: (split: number) => void;
+}
+
+const InputSection = ({ tip, split, onTipChange }: IProps) => {
+  const [isModalVisible] = useState(true);
+
   return (
     <View style={{ flexDirection: "row" }}>
       <View
@@ -20,7 +31,7 @@ const InputSection = () => {
             textDecorationLine: "underline",
           }}
         >
-          15%
+          {tip}%
         </Text>
       </View>
 
@@ -41,9 +52,31 @@ const InputSection = () => {
             textDecorationLine: "underline",
           }}
         >
-          4
+          {split}
         </Text>
       </View>
+
+      <Modal transparent={true} visible={isModalVisible} animationType="fade">
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Slider
+            style={{ width: 200, height: 40 }}
+            minimumValue={0}
+            maximumValue={30}
+            step={5}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            onValueChange={onTipChange}
+            value={tip}
+          />
+        </View>
+      </Modal>
     </View>
   );
 };
