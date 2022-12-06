@@ -79,11 +79,8 @@ const Home = () => {
   };
 
   const total = Number(`${dollars}.${cents}`);
-  const billTotalNumber = Math.ceil((total + total * (tip / 100)) * 100) / 100;
-  const billTotal = String(
-    Math.ceil((total + total * (tip / 100)) * 100) / 100
-  );
-  const splitTotal = String(Math.ceil((billTotalNumber / split) * 100) / 100);
+  const billTotal = (total + total * (tip / 100)) * 100;
+  const splitTotal = billTotal / split;
 
   const totals = {
     total: formattedTotal(),
@@ -95,8 +92,8 @@ const Home = () => {
     <View>
       <ResultSection
         total={totals.total}
-        billTotal={totals.billTotal}
-        splitTotal={totals.splitTotal}
+        billTotalInCents={totals.billTotal}
+        splitTotalInCents={totals.splitTotal}
       />
 
       <InputSection

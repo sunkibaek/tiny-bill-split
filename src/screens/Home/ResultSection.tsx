@@ -1,9 +1,11 @@
 import { SafeAreaView, Text, View, StyleSheet } from "react-native";
 
+import Money from "../../components/Money";
+
 interface IProps {
   total: string;
-  billTotal: string;
-  splitTotal: string;
+  billTotalInCents: number;
+  splitTotalInCents: number;
 }
 
 const styles = StyleSheet.create({
@@ -13,7 +15,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const ResultSection = ({ total, billTotal, splitTotal }: IProps) => {
+const ResultSection = ({
+  total,
+  billTotalInCents,
+  splitTotalInCents,
+}: IProps) => {
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -37,13 +43,13 @@ const ResultSection = ({ total, billTotal, splitTotal }: IProps) => {
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text>Bill Total</Text>
 
-            <Text style={{ fontSize: 32 }}>${billTotal}</Text>
+            <Money amountInCents={billTotalInCents} style={{ fontSize: 32 }} />
           </View>
 
           <View style={{ flex: 1, alignItems: "center" }}>
             <Text>Split Total</Text>
 
-            <Text style={{ fontSize: 32 }}>${splitTotal}</Text>
+            <Money amountInCents={splitTotalInCents} style={{ fontSize: 32 }} />
           </View>
         </View>
       </View>
