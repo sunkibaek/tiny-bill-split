@@ -14,14 +14,14 @@ export const KEY_INPUT_INITIAL_STATE = {
 const keyInputReducer = (
   state: typeof KEY_INPUT_INITIAL_STATE,
   action:
-    | { type: "keyInput"; payload: number }
-    | { type: "del" }
-    | { type: "decimal" }
+    | { type: "numPressed"; payload: number }
+    | { type: "delPressed" }
+    | { type: "periodPressed" }
 ) => {
   switch (action.type) {
-    case "decimal":
+    case "periodPressed":
       return { ...state, mode: "DECIMAL" };
-    case "del":
+    case "periodPressed":
       if (state.cents > 0) {
         return { ...state, cents: Math.floor(state.cents / 10) };
       }
@@ -31,7 +31,7 @@ const keyInputReducer = (
       }
 
       return { ...state, dollars: Math.floor(state.dollars / 10) };
-    case "keyInput":
+    case "numPressed":
       if (String(state.cents).length === MAX_LENGTHS.cents) {
         return;
       }

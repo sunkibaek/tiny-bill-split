@@ -19,16 +19,16 @@ const Home = () => {
 
   const handleNumPress = (num: NumType) => {
     if (num === ".") {
-      dispatch({ type: "decimal" });
+      dispatch({ type: "periodPressed" });
       return;
     }
 
     if (num === "DEL") {
-      dispatch({ type: "del" });
+      dispatch({ type: "delPressed" });
       return;
     }
 
-    dispatch({ type: "keyInput", payload: num });
+    dispatch({ type: "numPressed", payload: num });
   };
 
   const handleTipChange = (newTip: number) => {
