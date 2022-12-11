@@ -23,7 +23,7 @@ const Numpad = ({ title, onPress }: IProps) => {
   };
 
   return (
-    <Pressable style={styles.container} key={title} onPress={handlePress}>
+    <Pressable style={styles.container} onPress={handlePress}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
