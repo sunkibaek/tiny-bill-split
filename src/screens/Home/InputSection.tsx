@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
-import Slider from "@react-native-community/slider";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+import SliderModal from "../../components/SliderModal";
 
 interface IProps {
   tip: number;
@@ -9,101 +10,93 @@ interface IProps {
   onSplitChange: (split: number) => void;
 }
 
-const InputSection = ({ tip, split, onTipChange }: IProps) => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+const TIP_CONFIGS = {
+  min: 0,
+  max: 30,
+  step: 5,
+};
+const SPLIT_CONFIGS = {
+  min: 1,
+  max: 10,
+  step: 1,
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+  },
+  tipContainer: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#4f899f",
+    padding: 32,
+  },
+  splitContainer: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#dcbfb9",
+    padding: 32,
+  },
+  amountText: {
+    fontSize: 32,
+    textDecorationStyle: "solid",
+    textDecorationLine: "underline",
+  },
+});
+
+const InputSection = ({ tip, split, onTipChange, onSplitChange }: IProps) => {
+  const [isTipSliderVisible, setTipSliderVisible] = useState(false);
+  const [isSplitSliderVisible, setSplitSliderVisible] = useState(false);
 
   const handleTipPress = () => {
-    setIsModalVisible(true);
+    setTipSliderVisible(true);
   };
 
-  const handleModalDismiss = () => {
-    setIsModalVisible(false);
+  const handleSplitPress = () => {
+    setSplitSliderVisible(true);
+  };
+
+  const handleTipDismiss = () => {
+    setTipSliderVisible(false);
+  };
+
+  const handleSplitDismiss = () => {
+    setSplitSliderVisible(false);
   };
 
   return (
-    <View style={{ flexDirection: "row" }}>
-      <Pressable
-        style={{
-          flex: 1,
-          alignItems: "center",
-          backgroundColor: "#dcbfb9",
-          padding: 32,
-        }}
-        onPress={handleTipPress}
-      >
+    <View style={styles.container}>
+      <Pressable style={styles.tipContainer} onPress={handleTipPress}>
         <Text>Tip</Text>
 
-        <Text
-          style={{
-            fontSize: 32,
-            textDecorationStyle: "solid",
-            textDecorationLine: "underline",
-          }}
-        >
-          {tip}%
-        </Text>
+        <Text style={styles.amountText}>{tip}%</Text>
       </Pressable>
 
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          backgroundColor: "#4f899f",
-          padding: 32,
-        }}
-      >
+      <Pressable style={styles.splitContainer} onPress={handleSplitPress}>
         <Text>Split</Text>
 
-        <Text
-          style={{
-            fontSize: 32,
-            textDecorationStyle: "solid",
-            textDecorationLine: "underline",
-          }}
-        >
-          {split}
-        </Text>
-      </View>
+        <Text style={styles.amountText}>{split}</Text>
+      </Pressable>
 
-      <Modal transparent={true} visible={isModalVisible} animationType="fade">
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Pressable
-            onPress={handleModalDismiss}
-            style={{
-              flex: 1,
-              backgroundColor: "rgba(0,0,0,0.5)",
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
-          />
+      <SliderModal
+        value={tip}
+        onValueChange={onTipChange}
+        isVisible={isTipSliderVisible}
+        minimumValue={TIP_CONFIGS.min}
+        maximumValue={TIP_CONFIGS.max}
+        onDismiss={handleTipDismiss}
+        step={TIP_CONFIGS.step}
+      />
 
-          <Slider
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              width: 200,
-              height: 40,
-              padding: 32,
-            }}
-            minimumValue={0}
-            maximumValue={30}
-            step={5}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={onTipChange}
-            value={tip}
-          />
-        </View>
-      </Modal>
+      <SliderModal
+        value={split}
+        onValueChange={onSplitChange}
+        isVisible={isSplitSliderVisible}
+        minimumValue={SPLIT_CONFIGS.min}
+        maximumValue={SPLIT_CONFIGS.max}
+        onDismiss={handleSplitDismiss}
+        step={SPLIT_CONFIGS.step}
+      />
     </View>
   );
 };

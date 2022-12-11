@@ -12,7 +12,7 @@ const Home = () => {
   const [cents, setCents] = useState(0);
   const [mode, setMode] = useState<Mode>("NORMAL");
   const [tip, setTip] = useState(15);
-  const [split, setSplit] = useState(2);
+  const [split, setSplit] = useState(1);
 
   const handleNumPress = (num: NumType) => {
     if (num === ".") {
