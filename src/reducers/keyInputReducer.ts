@@ -21,7 +21,7 @@ const keyInputReducer = (
   switch (action.type) {
     case "periodPressed":
       return { ...state, mode: "DECIMAL" };
-    case "periodPressed":
+    case "delPressed":
       if (state.cents > 0) {
         return { ...state, cents: Math.floor(state.cents / 10) };
       }
