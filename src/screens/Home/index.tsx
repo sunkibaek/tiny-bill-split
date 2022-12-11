@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { View } from "react-native";
 
 import InputSection from "./InputSection";
@@ -7,55 +7,81 @@ import ResultSection from "./ResultSection";
 
 type Mode = "NORMAL" | "DECIMAL";
 
+const INITIAL_STATE: {
+  dollars: number;
+  cents: number;
+  mode: Mode;
+} = {
+  dollars: 0,
+  cents: 0,
+  mode: "NORMAL",
+};
+
+const reducer = (
+  state: typeof INITIAL_STATE,
+  {
+    type,
+    payload,
+  }: {
+    type: "keyInput";
+    payload: NumType;
+  }
+) => {
+  switch (type) {
+    case "keyInput":
+      if (payload === ".") {
+        return { ...state, mode: "DECIMAL" };
+      }
+
+      if (payload === "DEL") {
+        if (state.cents > 0) {
+          return { ...state, cents: Math.floor(state.cents / 10) };
+        }
+
+        if (state.mode === "DECIMAL") {
+          return { ...state, mode: "NORMAL" };
+        }
+
+        return { ...state, dollars: Math.floor(state.dollars / 10) };
+      }
+
+      if (typeof payload !== "number") {
+        throw new Error("Unsupported input entered.");
+      }
+
+      if (String(state.cents).length === 2) {
+        return;
+      }
+
+      if (String(state.dollars).length === 6) {
+        return;
+      }
+
+      if (state.mode === "DECIMAL") {
+        return { ...state, cents: state.cents * 10 + payload };
+      }
+
+      if (state.mode === "NORMAL") {
+        return { ...state, dollars: state.dollars * 10 + payload };
+      }
+
+      return;
+    default:
+      throw new Error(`Unsupported action type: ${type}`);
+  }
+};
+
 const Home = () => {
-  const [dollars, setDollars] = useState(0);
-  const [cents, setCents] = useState(0);
-  const [mode, setMode] = useState<Mode>("NORMAL");
+  const [{ dollars, cents, mode }, dispatch] = useReducer(
+    reducer,
+    INITIAL_STATE
+  );
+
   const [tip, setTip] = useState(15);
   const [split, setSplit] = useState(1);
 
   const handleNumPress = (num: NumType) => {
-    if (num === ".") {
-      setMode("DECIMAL");
-      return;
-    }
-
-    if (num === "DEL") {
-      if (cents > 0) {
-        setCents((prev) => Math.floor(prev / 10));
-        return;
-      }
-
-      if (mode === "DECIMAL") {
-        setMode("NORMAL");
-        return;
-      }
-
-      setDollars((prev) => Math.floor(prev / 10));
-      return;
-    }
-
-    if (typeof num !== "number") {
-      throw new Error("Unsupported input entered.");
-    }
-
-    if (String(cents).length === 2) {
-      return;
-    }
-
-    if (String(dollars).length === 6) {
-      return;
-    }
-
-    if (mode === "DECIMAL") {
-      setCents((prev) => prev * 10 + num);
-      return;
-    }
-
-    if (mode === "NORMAL") {
-      setDollars((prev) => prev * 10 + num);
-      return;
-    }
+    dispatch({ type: "keyInput", payload: num });
   };
 
   const handleTipChange = (newTip: number) => {
@@ -82,18 +108,12 @@ const Home = () => {
   const billTotal = (total + total * (tip / 100)) * 100;
   const splitTotal = billTotal / split;
 
-  const totals = {
-    total: formattedTotal(),
-    billTotal,
-    splitTotal,
-  };
-
   return (
     <View>
       <ResultSection
-        total={totals.total}
-        billTotalInCents={totals.billTotal}
-        splitTotalInCents={totals.splitTotal}
+        total={formattedTotal()}
+        billTotalInCents={billTotal}
+        splitTotalInCents={splitTotal}
       />
 
       <InputSection
