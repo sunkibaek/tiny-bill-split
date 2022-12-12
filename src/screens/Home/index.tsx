@@ -4,6 +4,7 @@ import { View } from "react-native";
 import keyInputReducer, {
   KEY_INPUT_INITIAL_STATE,
 } from "../../reducers/keyInputReducer";
+import totalFormat from "../../utils/totalFormat";
 import InputSection from "./InputSection";
 import NumpadSection from "./NumpadSection";
 import ResultSection from "./ResultSection";
@@ -39,18 +40,6 @@ const Home = () => {
     setSplit(newSplit);
   };
 
-  const formattedTotal = () => {
-    let result = String(dollars);
-
-    if (cents > 0) {
-      result += `.${String(cents)}`;
-    } else if (mode === "DECIMAL") {
-      result += ".";
-    }
-
-    return result;
-  };
-
   const total = Number(`${dollars}.${cents}`);
   const billTotal = (total + total * (tip / 100)) * 100;
   const splitTotal = billTotal / split;
@@ -58,7 +47,7 @@ const Home = () => {
   return (
     <View>
       <ResultSection
-        total={formattedTotal()}
+        total={totalFormat(dollars, cents, mode === "DECIMAL")}
         billTotalInCents={billTotal}
         splitTotalInCents={splitTotal}
       />
