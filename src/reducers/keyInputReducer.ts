@@ -11,13 +11,13 @@ export const KEY_INPUT_INITIAL_STATE = {
   mode: "NORMAL" as Mode,
 };
 
-const keyInputReducer = (
-  state: typeof KEY_INPUT_INITIAL_STATE,
+const keyInputReducer = <T extends typeof KEY_INPUT_INITIAL_STATE>(
+  state: T,
   action:
     | { type: "numPressed"; payload: number }
     | { type: "delPressed" }
     | { type: "periodPressed" }
-) => {
+): T => {
   switch (action.type) {
     case "periodPressed":
       return { ...state, mode: "DECIMAL" };
@@ -33,11 +33,11 @@ const keyInputReducer = (
       return { ...state, dollars: Math.floor(state.dollars / 10) };
     case "numPressed":
       if (String(state.cents).length === MAX_LENGTHS.cents) {
-        return;
+        return state;
       }
 
       if (String(state.dollars).length === MAX_LENGTHS.dollars) {
-        return;
+        return state;
       }
 
       if (state.mode === "DECIMAL") {
@@ -48,7 +48,7 @@ const keyInputReducer = (
         return { ...state, dollars: state.dollars * 10 + action.payload };
       }
 
-      return;
+      return state;
     default:
       throw new Error(`Unsupported action type: ${action}`);
   }
